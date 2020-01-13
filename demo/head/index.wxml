@@ -1,0 +1,4 @@
+<import src="/src/head/head.wxml"/>
+<view style="width:700rpx;height:700rpx;margin:25rpx">
+  <template is="head" data="{{id: 'mycanvas',width:700,height:700}}"/>
+</view>

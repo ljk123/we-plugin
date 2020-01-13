@@ -1,4 +1,4 @@
-import DrawTag from '../../src/drawtag.js'
+import DrawTag from '../../src/drawtag/drawtag'
 Page({
   //事件处理函数
   drawtag: function() {

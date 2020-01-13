@@ -1,5 +1,6 @@
 {
-  "pages": [
+  "pages": [    
+    "demo/head/index",
     "demo/drawtag/index"
   ],
   "window": {
