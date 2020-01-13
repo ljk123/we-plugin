@@ -1,0 +1,3 @@
+<canvas canvas-id='mycanvas' style='width:2000px;height:2000px;position:absolute;left:-2000px;top:-2000px'></canvas>
+<image wx:if="{{path}}" src="{{path}}" style="width:750rpx"></image>
+<button bindtap="drawtag">生成</button>
