@@ -5,7 +5,7 @@ export default class Head {
     this.w = size.w || size.width
     this.h = size.h || size.height
     this.default_w = 100
-    this.icon_w = 28
+    this.icon_w = 20
     //默认挂件属性
     this.default_draw_widget = {
       x: 0, //相对中心偏移
@@ -88,9 +88,9 @@ export default class Head {
         this.ctx.rect(-w / 2, -h / 2, w, h)
         this.ctx.setStrokeStyle('#fe579e')
         this.ctx.stroke()
-        //操作图标
-        this.ctx.drawImage('/src/head/images/c.png', -w / 2 - this.icon_w / 2, -h / 2 - this.icon_w / 2, this.icon_w, this.icon_w)
-        this.ctx.drawImage('/src/head/images/s.png', +w / 2 - this.icon_w / 2, +h / 2 - this.icon_w / 2, this.icon_w, this.icon_w)
+        //用代码画操作图标
+        this.drawCloseBtn(w,h)
+        this.drawScaleBtn(w,h)
       }
       this.ctx.rotate(-item.draw_widget.r * Math.PI / 180)
       this.ctx.translate(-mid - item.draw_widget.x, -mid - item.draw_widget.y)
@@ -273,5 +273,65 @@ export default class Head {
   }
   touchcancel(e) {
     //todo
+  }
+  //关闭操作图标
+  drawCloseBtn(w,h)
+  {
+    let btn_width=this.icon_w
+    //话个圆形
+    this.ctx.beginPath()
+    this.ctx.arc(-w / 2 , -h / 2,Math.sqrt(2)*btn_width/2,0,2 * Math.PI)
+    this.ctx.setFillStyle('#fe579e')
+    this.ctx.fill()    
+    let offset=btn_width/2/Math.sqrt(2)
+    this.ctx.beginPath()
+    this.ctx.setStrokeStyle('#fff')
+    this.ctx.setLineWidth(1.5)
+    //画个叉叉1
+    this.ctx.moveTo(-w / 2 -offset, -h / 2-offset)
+    this.ctx.lineTo(-w / 2 +offset, -h / 2+offset)
+    //画个叉叉2
+    this.ctx.moveTo(-w / 2 +offset, -h / 2-offset)
+    this.ctx.lineTo(-w / 2 -offset, -h / 2+offset)
+    this.ctx.stroke()
+  }
+  drawScaleBtn(w,h)
+  {
+    let btn_width=this.icon_w*1.2
+    //先画个圆剪切
+    this.ctx.beginPath()
+    this.ctx.arc(w / 2 , h / 2,Math.sqrt(2)*btn_width/2,0,2 * Math.PI)    
+    this.ctx.save()
+    this.ctx.clip()
+    //里面画个正方形
+    this.ctx.fillRect(+w / 2 - btn_width / 2, +h / 2 - btn_width / 2, btn_width, btn_width)
+    this.ctx.restore()    
+    let offset=btn_width/2/Math.sqrt(2)
+    
+    this.ctx.beginPath()
+    this.ctx.setStrokeStyle('#fff')
+    this.ctx.setLineWidth(1.5)
+
+    this.ctx.moveTo(w / 2 -offset, h / 2-offset)
+    this.ctx.lineTo(w / 2 -offset/4, h / 2-offset/4)
+
+    this.ctx.moveTo(w / 2 -offset, h / 2-offset)
+    this.ctx.lineTo(w / 2 -offset/4, h / 2-offset)
+
+    this.ctx.moveTo(w / 2 -offset, h / 2-offset)
+    this.ctx.lineTo(w / 2 -offset, h / 2-offset/4)
+
+
+    
+    this.ctx.moveTo(w / 2 +offset, h / 2+offset)
+    this.ctx.lineTo(w / 2 +offset/4, h / 2+offset/4)
+
+    this.ctx.moveTo(w / 2 +offset, h / 2+offset)
+    this.ctx.lineTo(w / 2 +offset/4, h / 2+offset)
+
+    this.ctx.moveTo(w / 2 +offset, h / 2+offset)
+    this.ctx.lineTo(w / 2 +offset, h / 2+offset/4)
+
+    this.ctx.stroke()
   }
 }
