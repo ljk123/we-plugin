@@ -1,7 +1,15 @@
 # 微信小程序的一些自己写过的轮子
 
 ------
-
+## 获取代码
+  git获取
+~~~
+git clone git@github.com:ljk123/we-plugin.git
+~~~
+  npm获取
+~~~
+npm install ljk123-we-plugin
+~~~
 ### canvas仿QQ印象标签生成：
 #### 1. 效果1
 ![canvas仿QQ印象标签生成效果1](images/drawtag.png)
