@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "name": "ljk123-we-plugin",
+  "description": "we-plugin",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ljk123/we-plugin.git"
+  },
+  "keywords": [
+    "we-plugin"
+  ],
+  "author": "ljk123",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ljk123/we-plugin/issues"
+  },
+  "homepage": "https://github.com/ljk123/we-plugin#readme"
+}
