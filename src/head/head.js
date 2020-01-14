@@ -72,6 +72,14 @@ export default class Head {
   drawWidgets() {
     //中心位置坐标
     let mid = this.px_rpx_scale * this.w / 2
+    //如果有选择的 切换为最上层
+    if(this.data.drawWidgetsArrayIndex!==-1)
+    {
+      let temp=this.data.drawWidgetsArray[this.data.drawWidgetsArrayIndex]
+      this.data.drawWidgetsArray.splice(this.data.drawWidgetsArrayIndex, 1)
+      this.data.drawWidgetsArray.push(temp)
+      this.data.drawWidgetsArrayIndex=this.data.drawWidgetsArray.length-1
+    }
     this.data.drawWidgetsArray.forEach((item, index) => {
       this.ctx.translate(mid + item.draw_widget.x, mid + item.draw_widget.y)
       //高宽
@@ -97,17 +105,34 @@ export default class Head {
     })
   }
   //画出来
-  draw(is_save = false) {
+  draw(cb = false) {
+    let is_save=typeof cb==='function'
     if (is_save) {
       wx.showLoading({
         title: '生成中...',
       })
+      //去掉选择框
       this.data.drawWidgetsArrayIndex = -1
     }
     this.drawHead()
     this.drawWidgets()
     if (is_save) {
-      this.ctx.draw(false, that.saveCmplete)
+      let that=this
+      this.ctx.draw(false, ()=>{
+        wx.canvasToTempFilePath({
+            x:0,
+            y:0,
+            width:that.w*that.px_rpx_scale,
+            height:that.h*that.px_rpx_scale,
+            canvasId:that.canvasid,
+            complete(){
+              wx.hideLoading()
+            },
+            success(res){
+              cb(res)
+            }
+        })
+      })
     } else {
       this.ctx.draw()
     }
@@ -186,7 +211,7 @@ export default class Head {
       if (this.data.drawWidgetsArrayIndex === index) {
         same = true
       }
-      this.data.drawWidgetsArrayIndex = index
+      this.data.drawWidgetsArrayIndex = index      
       this.touchWidgetsMoveHandle = {
         touch: {
           x: touch.x - this.data.drawWidgetsArray[this.data.drawWidgetsArrayIndex].draw_widget.x,
