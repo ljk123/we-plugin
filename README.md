@@ -20,7 +20,7 @@ git clone git@github.com:ljk123/we-plugin.git
 ![canvas头像挂件效果1](images/head-demo1.png)
 #### 2. 效果2
 ![canvas头像挂件效果2](images/head-demo2.png)
-#### 2. 效果2
+#### 3. 效果3
 ![canvas头像挂件效果3](images/head-demo3.png)
 
 [点我查看  demo](demo/head)
