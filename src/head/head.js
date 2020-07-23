@@ -125,8 +125,39 @@ export default class Head {
         let scale=text_width/w
         this.ctx.scale(1/scale,1/scale)
         //0.7 0.2修正
+        // 描边
+        if(item.obj.stroke)
+        {
+          if(item.obj.stroke.color)
+          {
+            this.ctx.setStrokeStyle(item.obj.stroke.color)
+          }
+          else{
+            this.ctx.setStrokeStyle("#000")//默认描边颜色
+          }
+          this.ctx.strokeText(item.obj.text,-w/2*scale*.7,h*scale*.2)
+        }
+
+        //画文字
+        if(item.obj.style && item.obj.style.color)
+        {
+          this.ctx.setFillStyle(item.obj.style.color)
+        }
+        else{
+          this.ctx.setFillStyle("#000")
+        }
+        // 阴影
+        if(item.obj.shadow)
+        {
+          this.ctx.setShadow(item.obj.shadow.offsetX||1,
+            item.obj.shadow.offsetY||1,
+            item.obj.shadow.blur||1,
+            item.obj.shadow.color||'#ccc')
+        }
         this.ctx.fillText(item.obj.text,-w/2*scale*.7,h*scale*.2)
+        this.ctx.setShadow(0,0,0,'black')
         this.ctx.scale(scale,scale)
+        
       }
       if (index === this.data.drawWidgetsArrayIndex) {
         //当前操作的挂件
