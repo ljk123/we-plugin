@@ -21,8 +21,6 @@ export default class Head {
       headimgpath: null, //背景的路劲
       hide_choose_img: true, //
       //挂件相关
-      widgets: [],
-      widgets_index: 0,
       drawWidgetsArray: [],
       drawWidgetsArrayIndex: -1,
     }
@@ -45,26 +43,56 @@ export default class Head {
   setHead(path) {
     this.data.headimgpath = path
   }
-  addWidget(path) {
+  addWidget(obj) {
     let that = this
-    wx.getImageInfo({
-      src: path,
-      success(res) {
-        let hpw = res.height / res.width
-        that.data.drawWidgetsArray.push({
-          path,
-          hpw,
-          //防止引用
-          draw_widget: Object.assign({}, that.default_draw_widget)
-        })
-        //选中当前添加的挂件
-        that.data.drawWidgetsArrayIndex = that.data.drawWidgetsArray.length - 1
-        that.draw()
-      },
-      fail(res) {
-        console.error(res)
+    if(typeof obj =='string')
+    {
+      let type='image',path=obj
+      obj={type,path}
+    }
+    else{
+      //暂时只支持文字了
+      obj.type='text'
+    }
+
+    if(obj.type==='text')
+    {
+      if(!obj.text)
+      {
+        throw new Error('请传入文字')
       }
-    })
+      let hpw=that.ctx.measureText('口').width/that.ctx.measureText(obj.text).width
+      //obj  {text:'',style:{},}
+      that.data.drawWidgetsArray.push({
+        obj,
+        hpw,
+        //防止引用
+        draw_widget: Object.assign({}, that.default_draw_widget)
+      })
+      that.data.drawWidgetsArrayIndex = that.data.drawWidgetsArray.length - 1
+      that.draw()
+    }
+    else if(obj.type==='image')
+    {
+      wx.getImageInfo({
+        src: obj.path,
+        success(res) {
+          let hpw = res.height / res.width
+          that.data.drawWidgetsArray.push({
+            obj,
+            hpw,
+            //防止引用
+            draw_widget: Object.assign({}, that.default_draw_widget)
+          })
+          //选中当前添加的挂件
+          that.data.drawWidgetsArrayIndex = that.data.drawWidgetsArray.length - 1
+          that.draw()
+        },
+        fail(res) {
+          console.error(res)
+        }
+      })
+    }
   }
   drawHead() {
     this.ctx.drawImage(this.data.headimgpath, 0, 0, this.px_rpx_scale * this.w, this.px_rpx_scale * this.h)
@@ -87,8 +115,19 @@ export default class Head {
         h = this.default_w * item.hpw * item.draw_widget.s
       // //旋转
       this.ctx.rotate(item.draw_widget.r * Math.PI / 180)
-
-      this.ctx.drawImage(item.path, -w / 2, -h / 2, w, h)
+      if(item.obj.type==='image')
+      {
+        this.ctx.drawImage(item.obj.path, -w / 2, -h / 2, w, h)
+      }
+      else if(item.obj.type==='text')
+      {
+        let text_width=this.ctx.measureText(item.obj.text).width*1.5
+        let scale=text_width/w
+        this.ctx.scale(1/scale,1/scale)
+        //0.7 0.2修正
+        this.ctx.fillText(item.obj.text,-w/2*scale*.7,h*scale*.2)
+        this.ctx.scale(scale,scale)
+      }
       if (index === this.data.drawWidgetsArrayIndex) {
         //当前操作的挂件
         //画出矩形
